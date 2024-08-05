@@ -85,6 +85,7 @@ from pyiceberg.expressions.visitors import visit as boolean_expression_visit
 from pyiceberg.io import (
     AWS_ACCESS_KEY_ID,
     AWS_REGION,
+    AWS_ROLE_ARN,
     AWS_SECRET_ACCESS_KEY,
     AWS_SESSION_TOKEN,
     GCS_DEFAULT_LOCATION,
@@ -361,6 +362,9 @@ class PyArrowFileIO(FileIO):
 
             if connect_timeout := self.properties.get(S3_CONNECT_TIMEOUT):
                 client_kwargs["connect_timeout"] = float(connect_timeout)
+
+            if role_arn := self.properties.get(AWS_ROLE_ARN):
+                client_kwargs["role_arn"] = role_arn
 
             return S3FileSystem(**client_kwargs)
         elif scheme in ("hdfs", "viewfs"):
