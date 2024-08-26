@@ -87,6 +87,7 @@ from pyiceberg.io import (
     AWS_REGION,
     AWS_ROLE_ARN,
     AWS_SECRET_ACCESS_KEY,
+    AWS_SESSION_NAME,
     AWS_SESSION_TOKEN,
     GCS_DEFAULT_LOCATION,
     GCS_ENDPOINT,
@@ -365,6 +366,9 @@ class PyArrowFileIO(FileIO):
 
             if role_arn := self.properties.get(AWS_ROLE_ARN):
                 client_kwargs["role_arn"] = role_arn
+
+            if session_name := self.properties.get(AWS_SESSION_NAME):
+                client_kwargs["session_name"] = session_name
 
             return S3FileSystem(**client_kwargs)
         elif scheme in ("hdfs", "viewfs"):
