@@ -1,4 +1,3 @@
-#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -15,39 +14,13 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-#
 
-name: "Python CI"
+# Default state for all rules
+default: true
 
-on:
-  push:
-    branches:
-    - 'main'
-  pull_request:
+# MD013/line-length - Line length
+MD013: false
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
-jobs:
-  lint-and-test:
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        python: ['3.8', '3.9', '3.10', '3.11', '3.12']
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Install poetry
-      run: make install-poetry
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python }}
-        cache: poetry
-        cache-dependency-path: ./poetry.lock
-    - name: Install
-      run: make install-dependencies
-    - name: Linters
-      run: make lint
-    - name: Tests
-      run: make test-coverage
+# MD007/ul-indent - Unordered list indentation
+MD007:
+  indent: 4
